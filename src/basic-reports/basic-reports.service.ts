@@ -20,7 +20,7 @@ export class BasicReportsService extends PrismaClient implements OnModuleInit {
 
   hello() {
     const docDefinition = getHelloWorldReport({
-      name: 'Fernando Herrera',
+      name: '',
     });
 
     const doc = this.printerService.createPdf(docDefinition);
