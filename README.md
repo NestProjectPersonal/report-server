@@ -5,5 +5,5 @@
 3. Clonar `.env.template` y renombrar a `.env` y completar las variables de entorno en .env
 4. Levantar la base de datos `docker compose up -d`
 5. Generar el Prisma client `npx prisma generate`
-6. Recontruir las tablas `npx prisma db pull`
+6. Reconstruir las tablas `npx prisma db pull`
 7. Ejecutar proyecto `npm run start:dev`
