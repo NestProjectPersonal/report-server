@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { PrinterService } from 'src/printer/printer.service';
 import { orderByIdReport } from 'src/reports';
@@ -13,13 +13,31 @@ export class StoreReportsService extends PrismaClient implements OnModuleInit {
         super();
     }
 
-    async getOrderByIdReport(orderId: string) {
-
-        const docDefinition = orderByIdReport()
-
+    async getOrderByIdReport(orderId: number) {
+        const order = await this.orders.findUnique({
+          where: {
+            order_id: orderId,
+          },
+          include: {
+            customers: true,
+            order_details: {
+              include: {
+                products: true,
+              },
+            },
+          },
+        });
+    
+        if (!order) {
+          throw new NotFoundException(`Order with id ${orderId} not found`);
+        }
+    
+        const docDefinition = orderByIdReport({
+          data: order as any,
+        });
+    
         const doc = this.printerService.createPdf(docDefinition);
-
+    
         return doc;
-
-    }
+      }
 }
